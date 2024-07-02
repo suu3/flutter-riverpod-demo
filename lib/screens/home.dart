@@ -83,6 +83,13 @@ class MyHome extends ConsumerWidget {
                               : null,
                         ),
                       ),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.delete),
+                        color: Colors.red,
+                        onPressed: () {
+                          ref.read(taskListProvider.notifier).removeTask(index);
+                        },
+                      ),
                     ),
                   ),
                 );

@@ -28,6 +28,13 @@ class TaskListNotifier extends StateNotifier<List<Task>> {
     state = [...state, newTask];
   }
 
+  void removeTask(int index) {
+    state = [
+      for (int i = 0; i < state.length; i++)
+        if (i != index) state[i],
+    ];
+  }
+
   void toggleTaskCompletion(int index) {
     state = [
       for (int i = 0; i < state.length; i++)
