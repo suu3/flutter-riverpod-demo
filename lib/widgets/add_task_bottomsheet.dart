@@ -11,6 +11,32 @@ class AddTaskBottomSheet extends ConsumerWidget {
     required this.onPressed,
   });
 
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData.dark().copyWith(
+            colorScheme: ColorScheme.dark(
+              primary: Colors.purple, // Header background color
+              onPrimary: Colors.white, // Header text color
+              surface: Colors.grey[800]!, // Background color of the calendar
+              onSurface: Colors.white, // Text color
+            ),
+            dialogBackgroundColor: Colors.black,
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null) {
+      taskData['dateTime'] = picked.toIso8601String(); // Save the selected date
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
@@ -56,7 +82,12 @@ class AddTaskBottomSheet extends ConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              // Icon(Icons.timer, size: 30),
+              IconButton(
+                icon: const Icon(Icons.calendar_today, size: 30),
+                onPressed: () {
+                  _selectDate(context);
+                },
+              ),
               // Icon(Icons.location_on, size: 30),
               // Icon(Icons.flag, size: 30),
               IconButton(

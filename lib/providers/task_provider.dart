@@ -9,11 +9,13 @@ class Task {
   final String title;
   final String description;
   final DateTime dateTime;
+  bool isCompleted;
 
   Task({
     required this.title,
     required this.description,
     required this.dateTime,
+    this.isCompleted = false,
   });
 }
 
@@ -24,5 +26,20 @@ class TaskListNotifier extends StateNotifier<List<Task>> {
     final newTask =
         Task(title: title, description: description, dateTime: DateTime.now());
     state = [...state, newTask];
+  }
+
+  void toggleTaskCompletion(int index) {
+    state = [
+      for (int i = 0; i < state.length; i++)
+        if (i == index)
+          Task(
+            title: state[i].title,
+            description: state[i].description,
+            dateTime: state[i].dateTime,
+            isCompleted: !state[i].isCompleted,
+          )
+        else
+          state[i],
+    ];
   }
 }

@@ -11,7 +11,11 @@ class MyHome extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final taskList = ref.watch(taskListProvider);
-    final Map<String, String> taskData = {'title': '', 'description': ''};
+    final Map<String, String> taskData = {
+      'title': '',
+      'description': '',
+      'dateTime': ''
+    };
 
     void addTask() {
       ref.read(taskListProvider.notifier).addTask(
@@ -49,10 +53,35 @@ class MyHome extends ConsumerWidget {
                       const EdgeInsets.symmetric(vertical: 3, horizontal: 16),
                   child: Card(
                     child: ListTile(
-                      leading: const Icon(Icons.radio_button_unchecked),
-                      title: Text(task.title),
+                      leading: IconButton(
+                        icon: Icon(
+                          task.isCompleted
+                              ? Icons.check_circle
+                              : Icons.radio_button_unchecked,
+                          color: task.isCompleted ? Colors.green : null,
+                        ),
+                        onPressed: () {
+                          ref
+                              .read(taskListProvider.notifier)
+                              .toggleTaskCompletion(index);
+                        },
+                      ),
+                      title: Text(
+                        task.title,
+                        style: TextStyle(
+                          decoration: task.isCompleted
+                              ? TextDecoration.lineThrough
+                              : null,
+                          color: task.isCompleted ? Colors.grey : null,
+                        ),
+                      ),
                       subtitle: Text(
-                        task.description,
+                        '${task.description}\n${task.dateTime.month}월 ${task.dateTime.day}일 까지',
+                        style: TextStyle(
+                          color: task.isCompleted
+                              ? Colors.grey.withOpacity(0.5)
+                              : null,
+                        ),
                       ),
                     ),
                   ),
