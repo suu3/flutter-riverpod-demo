@@ -17,6 +17,37 @@ class AddTaskBottomSheet extends StatefulWidget {
 
 class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+
+  bool _isButtonEnabled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _titleController.addListener(_updateButtonState);
+    _descriptionController.addListener(_updateButtonState);
+    _dateController.addListener(_updateButtonState);
+  }
+
+  @override
+  void dispose() {
+    _titleController.removeListener(_updateButtonState);
+    _descriptionController.removeListener(_updateButtonState);
+    _dateController.removeListener(_updateButtonState);
+    _titleController.dispose();
+    _descriptionController.dispose();
+    _dateController.dispose();
+    super.dispose();
+  }
+
+  void _updateButtonState() {
+    setState(() {
+      _isButtonEnabled = _titleController.text.isNotEmpty &&
+          _descriptionController.text.isNotEmpty &&
+          _dateController.text.isNotEmpty;
+    });
+  }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -44,6 +75,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
         _dateController.text = DateFormat.yMMMd().format(picked);
         widget.taskData['date'] = DateFormat.yMMMd().format(picked);
       });
+      _updateButtonState();
     }
   }
 
@@ -69,13 +101,16 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                 ),
               ),
               IconButton(
-                icon: const Icon(Icons.send, size: 30, color: Colors.purple),
-                onPressed: widget.onPressed,
+                icon: Icon(Icons.send,
+                    size: 30,
+                    color: _isButtonEnabled ? Colors.purple : Colors.grey),
+                onPressed: _isButtonEnabled ? widget.onPressed : null,
               ),
             ],
           ),
           const SizedBox(height: 16),
           TextField(
+            controller: _titleController,
             onChanged: (value) {
               widget.taskData['title'] = value;
             },
@@ -87,6 +122,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
           ),
           const SizedBox(height: 16),
           TextField(
+            controller: _descriptionController,
             onChanged: (value) {
               widget.taskData['description'] = value;
             },
@@ -110,19 +146,6 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             ),
           ),
           const SizedBox(height: 16),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-          //   children: [
-          //     IconButton(
-          //       icon: const Icon(Icons.calendar_today, size: 30),
-          //       onPressed: () {
-          //         _selectDate(context);
-          //       },
-          //     ),
-          //     // Icon(Icons.location_on, size: 30),
-          //     // Icon(Icons.flag, size: 30),
-          //   ],
-          // ),
         ],
       ),
     );
