@@ -13,21 +13,32 @@ class MyHome extends ConsumerStatefulWidget {
 }
 
 class _MyHomeState extends ConsumerState<MyHome> {
-  String _selectedFilter = '전체';
+  int _selectedFilterIndex = 0;
 
   List<Task> _filterTasks(List<Task> tasks) {
-    if (_selectedFilter == '완료된 할 일') {
-      return tasks.where((task) => task.isCompleted).toList();
-    } else if (_selectedFilter == '미완료된 할 일') {
+    if (_selectedFilterIndex == 1) {
       return tasks.where((task) => !task.isCompleted).toList();
+    } else if (_selectedFilterIndex == 2) {
+      return tasks.where((task) => task.isCompleted).toList();
     }
     return tasks;
   }
 
-  void _setFilter(String filter) {
+  void _setFilter(int index) {
     setState(() {
-      _selectedFilter = filter;
+      _selectedFilterIndex = index;
     });
+  }
+
+  String _filterLabel() {
+    switch (_selectedFilterIndex) {
+      case 1:
+        return '미완료된 할 일';
+      case 2:
+        return '완료된 할 일';
+      default:
+        return '전체 할 일';
+    }
   }
 
   @override
@@ -61,48 +72,40 @@ class _MyHomeState extends ConsumerState<MyHome> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () => _setFilter('전체'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: _selectedFilter == '전체'
-                              ? theme.primaryColor
-                              : Colors.grey,
-                        ),
-                        child: const Text('전체'),
+                  child: Center(
+                    child: ToggleButtons(
+                      isSelected: [
+                        _selectedFilterIndex == 0,
+                        _selectedFilterIndex == 1,
+                        _selectedFilterIndex == 2
+                      ],
+                      onPressed: (int index) {
+                        _setFilter(index);
+                      },
+                      borderRadius: BorderRadius.circular(8),
+                      selectedBorderColor: theme.primaryColor,
+                      fillColor: theme.primaryColor.withOpacity(0.2),
+                      constraints: const BoxConstraints(
+                        minHeight: 40.0, // 여기서 버튼의 최소 높이를 설정합니다.
+                        minWidth: 80.0, // 버튼의 최소 너비를 설정할 수도 있습니다.
                       ),
-                      ElevatedButton(
-                        onPressed: () => _setFilter('미완료된 할 일'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: _selectedFilter == '미완료된 할 일'
-                              ? theme.primaryColor
-                              : Colors.grey,
-                        ),
-                        child: const Text('미완료'),
-                      ),
-                      ElevatedButton(
-                        onPressed: () => _setFilter('완료된 할 일'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: _selectedFilter == '완료된 할 일'
-                              ? theme.primaryColor
-                              : Colors.grey,
-                        ),
-                        child: const Text('완료'),
-                      ),
-                    ],
+                      children: const [
+                        Text('전체'),
+                        Text('미완료'),
+                        Text('완료'),
+                      ],
+                    ),
                   ),
                 ),
                 Expanded(
                   child: Container(
                     padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 10),
+                        vertical: 20, horizontal: 10),
                     child: filteredTasks.isNotEmpty
                         ? TaskList(taskList: filteredTasks)
                         : Center(
                             child: Text(
-                              '$_selectedFilter이 없습니다.',
+                              '${_filterLabel()}이 없습니다.',
                               style: const TextStyle(
                                   fontSize: 18, color: Colors.grey),
                             ),
