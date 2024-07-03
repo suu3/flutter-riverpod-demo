@@ -40,15 +40,24 @@ class MyHome extends ConsumerWidget {
         onPressed: () {
           showModalBottomSheet(
             context: context,
+            isScrollControlled: true,
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
             ),
-            builder: (context) {
-              return AddTaskBottomSheet(
-                taskData: taskData,
-                onPressed: addTask,
-              );
-            },
+            builder: (context) => Padding(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  AddTaskBottomSheet(
+                    taskData: taskData,
+                    onPressed: addTask,
+                  ),
+                ],
+              ),
+            ),
           );
         },
         backgroundColor: theme.primaryColor,
