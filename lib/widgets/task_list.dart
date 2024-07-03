@@ -3,12 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod_demo/providers/task_provider.dart';
 
 class TaskList extends ConsumerWidget {
-  const TaskList({super.key});
+  final List<Task> taskList;
+
+  const TaskList({super.key, required this.taskList});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final taskList = ref.watch(taskListProvider);
-
     return ListView.builder(
       itemCount: taskList.length,
       itemBuilder: (context, index) {
