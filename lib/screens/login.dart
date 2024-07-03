@@ -45,8 +45,7 @@ class MyLogin extends StatelessWidget {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.circular(10), // 버튼의 반지름 값 조정
+                          borderRadius: BorderRadius.circular(10),
                         ),
                         padding: const EdgeInsets.all(20)),
                     onPressed: () {

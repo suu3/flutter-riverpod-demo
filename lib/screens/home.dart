@@ -77,8 +77,8 @@ class _MyHomeState extends ConsumerState<MyHome> {
                   child: Center(
                     child: ToggleButtons(
                       constraints: const BoxConstraints(
-                        minHeight: 40.0, // 여기서 버튼의 최소 높이를 설정합니다.
-                        minWidth: 80.0, // 버튼의 최소 너비를 설정할 수도 있습니다.
+                        minHeight: 40.0,
+                        minWidth: 80.0,
                       ),
                       isSelected: filters
                           .map((filter) => filter.index == _selectedFilterIndex)
