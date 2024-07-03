@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
-class AddTaskBottomSheet extends ConsumerWidget {
+class AddTaskBottomSheet extends StatefulWidget {
   final Map<String, String> taskData;
   final VoidCallback onPressed;
 
@@ -10,6 +10,13 @@ class AddTaskBottomSheet extends ConsumerWidget {
     required this.taskData,
     required this.onPressed,
   });
+
+  @override
+  State<AddTaskBottomSheet> createState() => _AddTaskBottomSheetState();
+}
+
+class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
+  final TextEditingController _dateController = TextEditingController();
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -33,15 +40,17 @@ class AddTaskBottomSheet extends ConsumerWidget {
       },
     );
     if (picked != null) {
-      taskData['dateTime'] = picked.toIso8601String(); // Save the selected date
+      setState(() {
+        _dateController.text = DateFormat.yMMMd().format(picked);
+        widget.taskData['date'] = DateFormat.yMMMd().format(picked);
+      });
     }
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width,
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+      padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
       ),
@@ -49,17 +58,26 @@ class AddTaskBottomSheet extends ConsumerWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            '할 일 추가',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                '할 일 추가',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.send, size: 30, color: Colors.purple),
+                onPressed: widget.onPressed,
+              ),
+            ],
           ),
           const SizedBox(height: 16),
           TextField(
             onChanged: (value) {
-              taskData['title'] = value;
+              widget.taskData['title'] = value;
             },
             decoration: InputDecoration(
               labelText: '할 일을 입력하세요.',
@@ -70,7 +88,7 @@ class AddTaskBottomSheet extends ConsumerWidget {
           const SizedBox(height: 16),
           TextField(
             onChanged: (value) {
-              taskData['description'] = value;
+              widget.taskData['description'] = value;
             },
             decoration: InputDecoration(
               labelText: '할 일에 대한 설명을 작성하세요.',
@@ -79,23 +97,32 @@ class AddTaskBottomSheet extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.calendar_today, size: 30),
-                onPressed: () {
-                  _selectDate(context);
-                },
-              ),
-              // Icon(Icons.location_on, size: 30),
-              // Icon(Icons.flag, size: 30),
-              IconButton(
-                icon: const Icon(Icons.send, size: 30, color: Colors.purple),
-                onPressed: onPressed,
-              ),
-            ],
+          TextField(
+            controller: _dateController,
+            readOnly: true,
+            onTap: () {
+              _selectDate(context);
+            },
+            decoration: InputDecoration(
+              labelText: '마감 날짜',
+              labelStyle: TextStyle(color: Colors.grey[700]),
+              border: const OutlineInputBorder(),
+            ),
           ),
+          const SizedBox(height: 16),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+          //   children: [
+          //     IconButton(
+          //       icon: const Icon(Icons.calendar_today, size: 30),
+          //       onPressed: () {
+          //         _selectDate(context);
+          //       },
+          //     ),
+          //     // Icon(Icons.location_on, size: 30),
+          //     // Icon(Icons.flag, size: 30),
+          //   ],
+          // ),
         ],
       ),
     );

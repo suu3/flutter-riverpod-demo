@@ -14,88 +14,85 @@ class MyHome extends ConsumerWidget {
     final Map<String, String> taskData = {
       'title': '',
       'description': '',
-      'dateTime': ''
+      'date': ''
     };
 
     void addTask() {
       ref.read(taskListProvider.notifier).addTask(
             taskData['title']!,
             taskData['description']!,
+            taskData['date']!,
           );
       Navigator.of(context).pop();
     }
 
     return Scaffold(
-      // appBar: AppBar(
-      //   leading: IconButton(
-      //     icon: const Icon(Icons.menu, color: Colors.white),
-      //     onPressed: () {},
-      //   ),
-      //   title: const Text('Home', style: TextStyle(color: Colors.white)),
-      //   centerTitle: true,
-      //   // actions: [
-      //   //   IconButton(
-      //   //     icon: const CircleAvatar(
-      //   //       backgroundImage: AssetImage('assets/profile_image.png'),
-      //   //     ),
-      //   //     onPressed: () {},
-      //   //   ),
-      //   // ],
-      // ),
-
-      body: taskList.isNotEmpty
-          ? ListView.builder(
-              itemCount: taskList.length,
-              itemBuilder: (context, index) {
-                final task = taskList[index];
-                return Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 3, horizontal: 16),
-                  child: Card(
-                    child: ListTile(
-                      leading: IconButton(
-                        icon: Icon(
-                          task.isCompleted
-                              ? Icons.check_circle
-                              : Icons.radio_button_unchecked,
-                          color: task.isCompleted ? Colors.green : null,
+      appBar: AppBar(
+        // leading: IconButton(
+        //   icon: const Icon(Icons.menu, color: Colors.white),
+        //   onPressed: () {},
+        // ),
+        title: const Text('할 일 목록', style: TextStyle(color: Colors.white)),
+        centerTitle: true,
+      ),
+      body: Container(
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+        child: taskList.isNotEmpty
+            ? ListView.builder(
+                itemCount: taskList.length,
+                itemBuilder: (context, index) {
+                  final task = taskList[index];
+                  return Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 3, horizontal: 16),
+                    child: Card(
+                      child: ListTile(
+                        leading: IconButton(
+                          icon: Icon(
+                            task.isCompleted
+                                ? Icons.check_circle
+                                : Icons.radio_button_unchecked,
+                            color: task.isCompleted ? Colors.green : null,
+                          ),
+                          onPressed: () {
+                            ref
+                                .read(taskListProvider.notifier)
+                                .toggleTaskCompletion(index);
+                          },
                         ),
-                        onPressed: () {
-                          ref
-                              .read(taskListProvider.notifier)
-                              .toggleTaskCompletion(index);
-                        },
-                      ),
-                      title: Text(
-                        task.title,
-                        style: TextStyle(
-                          decoration: task.isCompleted
-                              ? TextDecoration.lineThrough
-                              : null,
-                          color: task.isCompleted ? Colors.grey : null,
+                        title: Text(
+                          task.title,
+                          style: TextStyle(
+                            decoration: task.isCompleted
+                                ? TextDecoration.lineThrough
+                                : null,
+                            color: task.isCompleted ? Colors.grey : null,
+                          ),
                         ),
-                      ),
-                      subtitle: Text(
-                        '${task.description}\n${task.dateTime.month}월 ${task.dateTime.day}일 까지',
-                        style: TextStyle(
-                          color: task.isCompleted
-                              ? Colors.grey.withOpacity(0.5)
-                              : null,
+                        subtitle: Text(
+                          '${task.description}\n${task.date} 까지',
+                          style: TextStyle(
+                            color: task.isCompleted
+                                ? Colors.grey.withOpacity(0.5)
+                                : null,
+                          ),
                         ),
-                      ),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.delete),
-                        color: Colors.red,
-                        onPressed: () {
-                          ref.read(taskListProvider.notifier).removeTask(index);
-                        },
+                        trailing: IconButton(
+                          icon: const Icon(Icons.delete),
+                          color: Colors.red,
+                          onPressed: () {
+                            ref
+                                .read(taskListProvider.notifier)
+                                .removeTask(index);
+                          },
+                        ),
                       ),
                     ),
-                  ),
-                );
-              },
-            )
-          : const EmptyTaskList(),
+                  );
+                },
+              )
+            : const EmptyTaskList(),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showModalBottomSheet(
@@ -124,14 +121,6 @@ class MyHome extends ConsumerWidget {
             icon: Icon(Icons.home),
             label: 'Home',
           ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.calendar_today),
-          //   label: 'Calendar',
-          // ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.timer),
-          //   label: 'Focus',
-          // ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',

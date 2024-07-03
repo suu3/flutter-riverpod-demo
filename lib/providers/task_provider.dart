@@ -8,13 +8,13 @@ final taskListProvider =
 class Task {
   final String title;
   final String description;
-  final DateTime dateTime;
+  final String date;
   bool isCompleted;
 
   Task({
     required this.title,
     required this.description,
-    required this.dateTime,
+    required this.date,
     this.isCompleted = false,
   });
 }
@@ -22,9 +22,8 @@ class Task {
 class TaskListNotifier extends StateNotifier<List<Task>> {
   TaskListNotifier() : super([]);
 
-  void addTask(String title, String description) {
-    final newTask =
-        Task(title: title, description: description, dateTime: DateTime.now());
+  void addTask(String title, String description, String date) {
+    final newTask = Task(title: title, description: description, date: date);
     state = [...state, newTask];
   }
 
@@ -42,7 +41,7 @@ class TaskListNotifier extends StateNotifier<List<Task>> {
           Task(
             title: state[i].title,
             description: state[i].description,
-            dateTime: state[i].dateTime,
+            date: state[i].date,
             isCompleted: !state[i].isCompleted,
           )
         else
