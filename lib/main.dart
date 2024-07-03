@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod_demo/constants/routes.dart';
 import 'package:flutter_riverpod_demo/screens/home.dart';
 import 'package:flutter_riverpod_demo/screens/login.dart';
 import 'package:go_router/go_router.dart';
@@ -10,14 +11,14 @@ void main() {
 
 GoRouter router() {
   return GoRouter(
-    initialLocation: '/login',
+    initialLocation: Routes.login,
     routes: [
       GoRoute(
-        path: '/login',
+        path: Routes.login,
         builder: (context, state) => const MyLogin(),
       ),
       GoRoute(
-        path: '/home',
+        path: Routes.home,
         builder: (context, state) => const MyHome(),
       ),
     ],

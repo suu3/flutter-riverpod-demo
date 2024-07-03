@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod_demo/constants/routes.dart';
 import 'package:go_router/go_router.dart';
 
 class MyLogin extends StatelessWidget {
@@ -16,7 +17,7 @@ class MyLogin extends StatelessWidget {
           children: [
             const SizedBox(height: 120),
             const Text(
-              'Login',
+              '로그인',
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,
@@ -25,63 +26,43 @@ class MyLogin extends StatelessWidget {
             const SizedBox(height: 32),
             const TextField(
               decoration: InputDecoration(
-                labelText: 'Username',
-                hintText: 'Enter your Username',
+                labelText: '이메일',
+                hintText: '이메일을 입력하세요.',
               ),
             ),
             const SizedBox(height: 16),
             const TextField(
               obscureText: true,
               decoration: InputDecoration(
-                labelText: 'Password',
-                hintText: 'Enter your Password',
+                labelText: '비밀번호',
+                hintText: '비밀번호를 입력하세요.',
               ),
             ),
             const SizedBox(height: 32),
-            ElevatedButton(
-              onPressed: () {
-                context.go('/home'); // 로그인 성공 시 list 화면으로 이동
-              },
-              child: const Text('Login'),
-            ),
-            const SizedBox(height: 16),
-            const Row(
+            Row(
               children: [
-                Expanded(child: Divider(color: Color(0xFF232323))),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text('or'),
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(10), // 버튼의 반지름 값 조정
+                        ),
+                        padding: const EdgeInsets.all(20)),
+                    onPressed: () {
+                      context.go(Routes.home);
+                    },
+                    child: const Text(
+                      '로그인',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                 ),
-                Expanded(child: Divider(color: Color(0xFF232323))),
               ],
             ),
-            const SizedBox(height: 16),
-            ElevatedButton.icon(
-              onPressed: () {},
-              icon: Image.asset('assets/google_logo.png', height: 24),
-              label: const Text('Login with Google'),
-            ),
-            const SizedBox(height: 16),
-            // ElevatedButton.icon(
-            //   onPressed: () {},
-            //   icon: const Icon(Icons.apple, color: Color(0xFF232323)),
-            //   label: const Text('Login with Apple'),
-            // ),
-            // const Spacer(),
-            // Center(
-            //   child: RichText(
-            //     text: const TextSpan(
-            //       text: "Don't have an account? ",
-            //       style: TextStyle(color: Color(0xFF232323)),
-            //       children: <TextSpan>[
-            //         TextSpan(
-            //           text: 'Register',
-            //           style: TextStyle(color: Colors.blue),
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
             const SizedBox(height: 16),
           ],
         ),
