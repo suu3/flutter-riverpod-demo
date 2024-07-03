@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class AddTaskBottomSheet extends StatefulWidget {
-  final Map<String, String> taskData;
+  final Map<String, dynamic> taskData;
   final VoidCallback onPressed;
 
   const AddTaskBottomSheet({
@@ -73,7 +73,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
     if (picked != null) {
       setState(() {
         _dateController.text = DateFormat.yMMMd().format(picked);
-        widget.taskData['date'] = DateFormat.yMMMd().format(picked);
+        widget.taskData['date'] = picked;
       });
       _updateButtonState();
     }

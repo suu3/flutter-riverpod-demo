@@ -17,14 +17,20 @@ class _MyHomeState extends ConsumerState<MyHome> {
   int _selectedFilterIndex = filterAll.index;
 
   List<Task> _filterTasks(List<Task> tasks) {
+    List<Task> filteredTasks;
     switch (_selectedFilterIndex) {
       case 1:
-        return tasks.where((task) => !task.isCompleted).toList();
+        filteredTasks = tasks.where((task) => !task.isCompleted).toList();
+        break;
       case 2:
-        return tasks.where((task) => task.isCompleted).toList();
+        filteredTasks = tasks.where((task) => task.isCompleted).toList();
+        break;
       default:
-        return tasks;
+        filteredTasks = tasks;
+        break;
     }
+    filteredTasks.sort((a, b) => a.date.compareTo(b.date));
+    return filteredTasks;
   }
 
   void _setFilter(int index) {
@@ -42,10 +48,10 @@ class _MyHomeState extends ConsumerState<MyHome> {
     final theme = Theme.of(context);
     final taskList = ref.watch(taskListProvider);
     final filteredTasks = _filterTasks(taskList);
-    final Map<String, String> taskData = {
+    final Map<String, dynamic> taskData = {
       'title': '',
       'description': '',
-      'date': ''
+      'date': DateTime.now(),
     };
 
     void addTask() {
@@ -67,8 +73,7 @@ class _MyHomeState extends ConsumerState<MyHome> {
           : Column(
               children: [
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                  padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
                   child: Center(
                     child: ToggleButtons(
                       constraints: const BoxConstraints(
@@ -97,7 +102,7 @@ class _MyHomeState extends ConsumerState<MyHome> {
                 Expanded(
                   child: Container(
                     padding: const EdgeInsets.symmetric(
-                        vertical: 20, horizontal: 10),
+                        vertical: 16, horizontal: 10),
                     child: filteredTasks.isNotEmpty
                         ? TaskList(taskList: filteredTasks)
                         : Center(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod_demo/providers/task_provider.dart';
+import 'package:intl/intl.dart';
 
 class TaskList extends ConsumerWidget {
   final List<Task> taskList;
@@ -39,7 +40,7 @@ class TaskList extends ConsumerWidget {
                 ),
               ),
               subtitle: Text(
-                '${task.description}\n${task.date} 까지',
+                '${task.description}\n${DateFormat.yMMMd().format(task.date)} 까지',
                 style: TextStyle(
                   color: task.isCompleted ? Colors.grey.withOpacity(0.5) : null,
                 ),

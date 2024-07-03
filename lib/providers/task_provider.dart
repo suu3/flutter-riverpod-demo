@@ -8,7 +8,7 @@ final taskListProvider =
 class Task {
   final String title;
   final String description;
-  final String date;
+  final DateTime date;
   bool isCompleted;
 
   Task({
@@ -22,7 +22,7 @@ class Task {
 class TaskListNotifier extends StateNotifier<List<Task>> {
   TaskListNotifier() : super([]);
 
-  void addTask(String title, String description, String date) {
+  void addTask(String title, String description, DateTime date) {
     final newTask = Task(title: title, description: description, date: date);
     state = [...state, newTask];
   }
