@@ -26,8 +26,9 @@ class _MyLoginState extends State<MyLogin> {
       });
       await supabase.auth.signInWithOtp(
         email: _emailController.text.trim(),
-        emailRedirectTo:
-            kIsWeb ? null : 'io.supabase.flutterquickstart://login-callback/',
+        emailRedirectTo: kIsWeb
+            ? 'https://suu3.github.io/flutter-riverpod-demo/'
+            : 'io.supabase.flutterquickstart://login-callback/',
       );
       if (mounted) {
         context.showSnackBar('Check your email for a login link!');
