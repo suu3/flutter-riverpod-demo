@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod_demo/constants/routes.dart';
 import 'package:flutter_riverpod_demo/constants/todo_filter.dart';
 import 'package:flutter_riverpod_demo/providers/task_provider.dart';
 import 'package:flutter_riverpod_demo/widgets/add_task_bottomsheet.dart';
 import 'package:flutter_riverpod_demo/widgets/empty_task_list.dart';
 import 'package:flutter_riverpod_demo/widgets/task_list.dart';
+import 'package:go_router/go_router.dart';
 
 class MyHome extends ConsumerStatefulWidget {
   const MyHome({super.key});
@@ -15,6 +17,21 @@ class MyHome extends ConsumerStatefulWidget {
 
 class _MyHomeState extends ConsumerState<MyHome> {
   int _selectedFilterIndex = filterAll.index;
+  int _selectedBottomNavIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedBottomNavIndex = index;
+    });
+    switch (index) {
+      case 0:
+        context.go(Routes.home);
+        break;
+      case 1:
+        context.go(Routes.profile);
+        break;
+    }
+  }
 
   List<Task> _filterTasks(List<Task> tasks) {
     List<Task> filteredTasks;
@@ -148,6 +165,8 @@ class _MyHomeState extends ConsumerState<MyHome> {
         backgroundColor: Colors.grey,
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.grey[20],
+        currentIndex: _selectedBottomNavIndex,
+        onTap: _onItemTapped,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
