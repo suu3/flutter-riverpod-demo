@@ -23,17 +23,19 @@ final supabase = Supabase.instance.client;
 GoRouter router() {
   return GoRouter(
     initialLocation: Routes.login,
-    redirect: (context, state) {
-      final session = Supabase.instance.client.auth.currentSession;
-      final loggingIn = state.uri.toString() == Routes.login;
 
-      if (session == null && !loggingIn) {
-        return Routes.login;
-      } else if (session != null && loggingIn) {
-        return Routes.home;
-      }
-      return null;
-    },
+    // ** supabase 만료되어 주석처리
+    // redirect: (context, state) {
+    //   final session = Supabase.instance.client.auth.currentSession;
+    //   final loggingIn = state.uri.toString() == Routes.login;
+
+    //   if (session == null && !loggingIn) {
+    //     return Routes.login;
+    //   } else if (session != null && loggingIn) {
+    //     return Routes.home;
+    //   }
+    //   return null;
+    // },
     routes: [
       GoRoute(
         path: Routes.login,

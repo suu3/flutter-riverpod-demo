@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod_demo/constants/routes.dart';
+import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_riverpod_demo/main.dart';
 // import 'package:flutter_riverpod_demo/screens/profile.dart';
@@ -24,16 +26,19 @@ class _MyLoginState extends State<MyLogin> {
       setState(() {
         _isLoading = true;
       });
-      await supabase.auth.signInWithOtp(
-        email: _emailController.text.trim(),
-        emailRedirectTo: kIsWeb
-            ? 'https://suu3.github.io/flutter-riverpod-demo/'
-            : 'io.supabase.flutterquickstart://login-callback/',
-      );
+
+      //supabase 만료로 주석처리
+      // await supabase.auth.signInWithOtp(
+      //   email: _emailController.text.trim(),
+      //   emailRedirectTo: kIsWeb
+      //       ? 'https://suu3.github.io/flutter-riverpod-demo/'
+      //       : 'io.supabase.flutterquickstart://login-callback/',
+      // );
       if (mounted) {
         context.showSnackBar('Check your email for a login link!');
 
         _emailController.clear();
+        context.go(Routes.home);
       }
     } on AuthException catch (error) {
       if (mounted) context.showSnackBar(error.message, isError: true);
